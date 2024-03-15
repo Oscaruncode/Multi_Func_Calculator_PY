@@ -11,10 +11,7 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-import sympy
-from sympy import symbols
-from sympy.solvers import solve
-from sympy import factor
+from sympy import symbols, Eq, solve, factor,sympify
 
 
 def show_menu():
@@ -26,7 +23,6 @@ def show_menu():
     print("6) Convert fractions to decimals and percents")
     print("7) Convert percents to decimals and fractions")
     print("8) Exit")
-
 
 def solve_proportions(n1, d1, n2, d2):
     variables = [n1, d1, n2, d2]
@@ -53,8 +49,22 @@ def solve_proportions(n1, d1, n2, d2):
 
     # If all vars are nums (there is not an unknown)
     return "No unknowns"
+def solve_for_x(left, right, zero_syntax_eq):
+    if zero_syntax_eq:
+        equation = Eq(sympify(right), 0)
+    else:
+        equation = Eq(sympify(right), symbols('y'))
 
+    solution = solve(equation, symbols('x'))
 
+    if solution:
+        print("Solutions for x:")
+        for s in solution:
+            print("x =", s)
+    else:
+        print("No solution found for x.")
+
+#MAIN EXECUTION
 while True:
     show_menu()
     option = input("Enter your choice: ")
@@ -69,14 +79,25 @@ while True:
                     n1, d1 = left.split("/")
                     n2, d2 = right.split("/")
                     print(solve_proportions(n1, d1, n2, d2))
-                    time.sleep(1.5)
                 else:
                     print("Invalid format")
             else:
                 print("Invalid format")
+            time.sleep(1.5)
         case "2":
-            print("** solve for x in equations **")
-            # Tu lógica para resolver ecuaciones con x aquí
+            print('** Solve for x in equations **')
+            equation = input("Insert an equation in terms of x and y to solve for x.\nExamples: y=x*2+1, 0=2*x-y\n")
+            if "=" in equation:
+                left, right = equation.split("=")
+                if "y" in left:
+                    solve_for_x(left, right.strip(), False)
+                elif "0" in left:
+                    solve_for_x(left.strip(), right.strip(), True)
+                else:
+                    print("Invalid format: Equation should have 'y' on the left or '0' on the left.")
+            else:
+                print("Invalid format: Equation should have '='.")
+            time.sleep(1.5)
         case "4":
             print("** factor square roots **")
             # Tu lógica para factorizar raíces cuadradas aquí

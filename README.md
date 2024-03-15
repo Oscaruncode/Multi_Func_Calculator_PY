@@ -6,7 +6,7 @@
 For this challenge, you need to create a multi-function calculator using Python that take input and do the following:
 
 - [x] Solve proportions
-- [ ] Solve for x in equations
+- [x] Solve for x in equations
 - [ ] Factor square roots
 - [ ] Convert decimals to fractions and percents
 - [ ] Convert fractions to decimals and percents
