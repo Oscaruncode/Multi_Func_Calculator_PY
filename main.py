@@ -1,14 +1,4 @@
-"""For this challenge, you need to create a multi-function calculator using Python that take input and do the following:
-
-solve proportions
-solve for x in equations
-factor square roots
-convert decimals to fractions and percents
-convert fractions to decimals and percents
-convert percents to decimals and fractions"""
 import time,re,math
-import matplotlib.pyplot as plt
-import numpy as np
 from sympy import symbols, Eq, solve, factor,sympify,pprint,sqrt as sqrt_from_sympy
 
 
@@ -76,6 +66,36 @@ def factor_square_roots(num):
 
     return str(square_root)+"*"+"sqrt("+str(other_factor)+")"
 
+def convert_decimal_to_fraction(decStr):
+    decimal_parts = decStr.split('.')
+    numerator = int(decimal_parts[0] + decimal_parts[1])
+    denominator = 10 ** len(decimal_parts[1])
+    return str(numerator) + "/" + str(denominator)
+
+def convert_decimal_to_percent(decStr):
+    decimal = float(decStr)
+    return str(decimal * 100) + "%"
+
+def convert_fraction_to_decimal(fractionStr):
+    if "/" in fractionStr:
+        numerator, denominator = fractionStr.split("/")
+        try:
+            decimal = int(numerator) / int(denominator)
+            return str(decimal)
+        except ZeroDivisionError:
+            return "Division by zero error!"
+        except ValueError:
+            return "Invalid input format!"
+    else:
+        return "Invalid format."
+def convert_percent_to_decimal(percentStr):
+    try:
+        percent, symbol = percentStr.split("%")
+        decimal = float(percent) / 100
+        return str(decimal)
+    except ValueError:
+        return "Invalid input format!"
+
 
 while True:
     show_menu()
@@ -113,7 +133,7 @@ while True:
         case "3":
             pattern_sqrt = r"\((\d+(?:\.\d+)?)\)"
             print("** factor square roots **")
-            numStr = input("Insert the num of the square root for factor. format: 1)sqrt(num) 2) just write the num\n")
+            numStr = input("Insert the num of the square root for factor. format: 1)sqrt(num) 2) Just write the num.\n")
             result_for_sqrt = re.search(pattern_sqrt, numStr)
             if result_for_sqrt:
                 num = float(result_for_sqrt.group(1))
@@ -125,15 +145,31 @@ while True:
             else:
                 print("Invalid format for the option choosed")
             time.sleep(1.5)
-        case "4":
+        case "4":  #work
             print("** convert decimals to fractions and percents **")
-            # Tu lógica para convertir decimales a fracciones y porcentajes aquí
+            decStr = input("Insert the decimal. (Example format .123)\n")
+            fractionStr=convert_decimal_to_fraction(decStr)
+            percentStr=convert_decimal_to_percent(decStr)
+            print("Decimal:",decStr)
+            print("Fraction:",fractionStr)
+            print("percentStr:",percentStr)
+            time.sleep(1.5)
         case "5":
             print("** convert fractions to decimals and percents **")
-            # Tu lógica para convertir fracciones a decimales y porcentajes aquí
+            fractionStr = input("Insert the fraction. (Example format 5/8)\n")
+            decStr=convert_fraction_to_decimal(fractionStr)
+            percentStr=convert_decimal_to_percent(decStr)
+            print("Decimal:", decStr)
+            print("Fraction:", fractionStr)
+            print("percentStr:", percentStr)
         case "6":
             print("** convert percents to decimals and fractions **")
-            # Tu lógica para convertir porcentajes a decimales y fracciones aquí
+            percentStr = input("Insert the percent. (Example format 25%)\n")
+            decStr=convert_percent_to_decimal(percentStr)
+            fractionStr = convert_decimal_to_fraction(decStr)
+            print("Decimal:", decStr)
+            print("Fraction:", fractionStr)
+            print("percentStr:", percentStr)
         case "7":
             break
         case _:
