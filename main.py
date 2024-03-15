@@ -6,23 +6,21 @@ factor square roots
 convert decimals to fractions and percents
 convert fractions to decimals and percents
 convert percents to decimals and fractions"""
-
-import time
+import time,re,math
 import matplotlib.pyplot as plt
 import numpy as np
-import math
-from sympy import symbols, Eq, solve, factor,sympify
+from sympy import symbols, Eq, solve, factor,sympify,pprint,sqrt as sqrt_from_sympy
 
 
 def show_menu():
     print("Select one of the following operations:")
     print("1) Solve proportions")
     print("2) Solve for x in equations")
-    print("4) Factor square roots")
-    print("5) Convert decimals to fractions and percents")
-    print("6) Convert fractions to decimals and percents")
-    print("7) Convert percents to decimals and fractions")
-    print("8) Exit")
+    print("3) Factor square roots")
+    print("4) Convert decimals to fractions and percents")
+    print("5) Convert fractions to decimals and percents")
+    print("6) Convert percents to decimals and fractions")
+    print("7) Exit")
 
 def solve_proportions(n1, d1, n2, d2):
     variables = [n1, d1, n2, d2]
@@ -64,7 +62,21 @@ def solve_for_x(left, right, zero_syntax_eq):
     else:
         print("No solution found for x.")
 
-#MAIN EXECUTION
+
+def factor_square_roots(num):
+    upper_limit = math.floor(math.sqrt(num)) + 1
+    max_factor = 1
+
+    for maybe_factor in range(1, upper_limit):
+        if num % (maybe_factor ** 2) == 0:
+            max_factor = maybe_factor ** 2
+
+    other_factor = num / max_factor
+    square_root = sqrt_from_sympy(max_factor)
+
+    return str(square_root)+"*"+"sqrt("+str(other_factor)+")"
+
+
 while True:
     show_menu()
     option = input("Enter your choice: ")
@@ -98,19 +110,31 @@ while True:
             else:
                 print("Invalid format: Equation should have '='.")
             time.sleep(1.5)
-        case "4":
+        case "3":
+            pattern_sqrt = r"\((\d+(?:\.\d+)?)\)"
             print("** factor square roots **")
-            # Tu lógica para factorizar raíces cuadradas aquí
-        case "5":
+            numStr = input("Insert the num of the square root for factor. format: 1)sqrt(num) 2) just write the num\n")
+            result_for_sqrt = re.search(pattern_sqrt, numStr)
+            if result_for_sqrt:
+                num = float(result_for_sqrt.group(1))
+                output = factor_square_roots(num)
+                pprint(output)
+            elif isinstance(numStr, str) and numStr.isdigit():
+                output = factor_square_roots(float(numStr))
+                pprint(output)
+            else:
+                print("Invalid format for the option choosed")
+            time.sleep(1.5)
+        case "4":
             print("** convert decimals to fractions and percents **")
             # Tu lógica para convertir decimales a fracciones y porcentajes aquí
-        case "6":
+        case "5":
             print("** convert fractions to decimals and percents **")
             # Tu lógica para convertir fracciones a decimales y porcentajes aquí
-        case "7":
+        case "6":
             print("** convert percents to decimals and fractions **")
             # Tu lógica para convertir porcentajes a decimales y fracciones aquí
-        case "8":
+        case "7":
             break
         case _:
             print("Select a valid operation")
